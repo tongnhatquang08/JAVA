@@ -2,8 +2,8 @@ package Multi_Threading;
 
 import java.util.Scanner;
 
-public class NumberSpinner extends Thread {
-    private boolean running = true;
+public class NumberSpinner_2 implements Runnable {
+    private volatile boolean running = true;
     private int currentNumber = 0;
 
     @Override
@@ -34,7 +34,6 @@ public class NumberSpinner extends Thread {
             }
         }
     }
-
     public void stopSpinner() {
         running = false;
     }
@@ -43,16 +42,19 @@ public class NumberSpinner extends Thread {
     }
     public static void main(String[] args) {
         NumberSpinner spinner = new NumberSpinner();
-        spinner.start();
+        Thread spinnerThread = new Thread(spinner);
+        spinnerThread.start();
+
         Scanner scanner = new Scanner(System.in);
         System.out.println("Nhấn Enter để dừng quay số.");
         scanner.nextLine();
         spinner.stopSpinner();
         try {
-            spinner.join();
+            spinnerThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("Con số đã quay: " + spinner.getCurrentNumber());
     }
 }
+
